@@ -61,25 +61,37 @@ export const HEADER_NAV_LINKS = [
 ];
 
 export const FOOTER_LINKS = {
-  quickLinks: [
-    { name: "About Us", href: "/about" },
-    { name: "Careers", href: "/careers" },
-    { name: "Press", href: "/press" },
-    { name: "Blog", href: "/blog" }
+  menu: [
+    { name: "Savouries", href: "/category/Savouries" },
+    { name: "Mithai", href: "/category/Mithai" },
+    { name: "Bakery Cookies and Chocolates", href: "/category/Cookies and Chocolates" },
+    { name: "Ready To Eat And Frozen", href: "/category/Ready To Eat And Frozen" },
+    { name: "Trail Mixes and Dry Fruits", href: "/category/Trail Mixes and Dry Fruits" }
   ],
-  products: [
-    { name: "Savouries", href: "/category/savouries" },
-    { name: "Sweets", href: "/category/mithai" },
-    { name: "Bakery", href: "/category/bakery" },
-    { name: "Beverages", href: "/category/beverages" }
-  ],
+
   support: [
     { name: "Contact Us", href: "/contact" },
     { name: "FAQs", href: "/faqs" },
-    { name: "Shipping Info", href: "/shipping" },
-    { name: "Returns", href: "/returns" }
+    { name: "Find Your Nearest Store", href: "/store-locator" }
+  ],
+
+  corporate: [
+    { name: "About Us", href: "/about" },
+    { name: "Reward Points", href: "/rewards" },
+    { name: "Dealership Form", href: "/franchise" },
+    { name: "Corporate", href: "/corporate" }
+  ],
+
+  policies: [
+    { name: "Shipping Policy", href: "/shipping" },
+    { name: "Returns & Cancellation", href: "/returns" },
+    { name: "Privacy Policy", href: "/privacy" },
+    { name: "Terms & Conditions", href: "/terms" },
+    { name: "CSR Policy", href: "/csr" }
   ]
 };
+
+
 
 export const HERO_SLIDES = [
   {
@@ -262,3 +274,14 @@ export const RECIPES = [
   { id: 2, title: "Bhujia Sandwich", time: "5 mins", difficulty: "Moderate", image: "https://images.unsplash.com/photo-1528735602780-2552fd46c7af?q=80&w=600&auto=format&fit=crop" },
   { id: 3, title: "Mini Aloo Masala Toast", time: "20 mins", difficulty: "Easy", image: "https://images.unsplash.com/photo-1541592106381-b31e9677c0e5?q=80&w=600&auto=format&fit=crop" },
 ];
+/* ------------------------------
+   CATEGORY → OFFICIAL BANNERS
+--------------------------------*/
+export const CATEGORY_BANNERS = {
+  "Savouries": "https://www.haldiram.com/media/.renditions/wysiwyg/homepage/Savouries_Banner_1_.jpg",
+  "Mithai": "https://www.haldiram.com/media/.renditions/wysiwyg/homepage/mithai_Banner.jpg",
+  "Bakery": "https://www.haldiram.com/media/.renditions/wysiwyg/homepage/bakery_banner.jpg",
+  "Cookies and Chocolates": "https://www.haldiram.com/media/wysiwyg/homepage/cookies_and_choco_banner.jpg",
+  "Ready To Eat And Frozen": "https://www.haldiram.com/media/wysiwyg/homepage/ready_to_eat_banner.jpg",
+  "Trail Mixes and Dry Fruits": "https://www.haldiram.com/media/wysiwyg/homepage/dryfruits_banner.jpg"
+};
