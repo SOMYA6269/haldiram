@@ -48,7 +48,7 @@ const Navbar = ({ setMobileMenuOpen, cartCount, onOpenCart, onNavigate }) => {
           onClick={() => onNavigate("/")}
           className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2"
         >
-          <img src="/logo.png" alt="Logo" className="h-14 object-contain" />
+          <img src="/public/images/lgo.png" alt="Logo" className="h-14 object-contain" />
         </button>
 
         <div className="w-20 flex items-center justify-end gap-5">
@@ -166,3 +166,4 @@ const Navbar = ({ setMobileMenuOpen, cartCount, onOpenCart, onNavigate }) => {
 };
 
 export default Navbar;
+
