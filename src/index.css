@@ -1,86 +1,79 @@
+/* ------------------------------------------------------ */
+/* 1) GOOGLE FONTS (must be FIRST!) */
+/* ------------------------------------------------------ */
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700;800&family=Inter:wght@300;400;600;700&display=swap');
+
+/* ------------------------------------------------------ */
+/* 2) TAILWIND DIRECTIVES */
+/* ------------------------------------------------------ */
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
- 
 
-
-/* src/index.css (top) */
-@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700;800&family=Inter:wght@300;400;600;700&display=swap');
-
-:root{
+/* ------------------------------------------------------ */
+/* 3) GLOBAL VARIABLES */
+/* ------------------------------------------------------ */
+:root {
   --brand-red: #E31E24;
   --frame-gold: #E7CFA8;
 }
 
-/* apply base fonts */
+/* ------------------------------------------------------ */
+/* 4) BASE FONTS */
+/* ------------------------------------------------------ */
 html, body, #root {
   font-family: 'Inter', system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+  background-color: #ffffff;
 }
-h1,h2,h3,h4,h5,h6 {
+
+h1, h2, h3, h4, h5, h6 {
   font-family: 'Playfair Display', serif;
 }
 
-/* Custom scrollbar */
-::-webkit-scrollbar {
-  width: 8px;
-}
+/* ------------------------------------------------------ */
+/* 5) CUSTOM SCROLLBAR */
+/* ------------------------------------------------------ */
+::-webkit-scrollbar { width: 8px; }
+::-webkit-scrollbar-track { background: #f1f1f1; }
+::-webkit-scrollbar-thumb { background: #c1c1c1; border-radius: 4px; }
+::-webkit-scrollbar-thumb:hover { background: #a1a1a1; }
 
-::-webkit-scrollbar-track {
-  background: #f1f1f1;
-}
-
-::-webkit-scrollbar-thumb {
-  background: #c1c1c1;
-  border-radius: 4px;
-}
-
-::-webkit-scrollbar-thumb:hover {
-  background: #a1a1a1;
-}
-
-/* Custom animations */
+/* ------------------------------------------------------ */
+/* 6) ANIMATIONS */
+/* ------------------------------------------------------ */
 @keyframes fadeInUp {
-  from {
-    opacity: 0;
-    transform: translateY(30px);
-}
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+  from { opacity: 0; transform: translateY(30px); }
+  to { opacity: 1; transform: translateY(0); }
 }
 
 @keyframes fadeIn {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
+  from { opacity: 0; }
+  to { opacity: 1; }
 }
 
+/* Smooth marquee scroll */
 @keyframes scroll {
-  0% {
-    transform: translateX(0);
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-100%); }
+}
+
+/* Animation Classes */
+.animate-fade-in-up { animation: fadeInUp 0.6s ease-out; }
+.animate-fade-in { animation: fadeIn 0.3s ease-out; }
+.animate-scroll { animation: scroll 8s linear infinite; }
+
+/* ------------------------------------------------------ */
+/* 7) RESPONSIVE — Faster scroll on mobile */
+/* ------------------------------------------------------ */
+@media (max-width: 640px) {
+  .animate-scroll {
+    animation-duration: 5s !important;
   }
-  100% {
-    transform: translateX(-50%);
-  }
 }
 
-.animate-fade-in-up {
-  animation: fadeInUp 0.6s ease-out;
-}
-
-.animate-fade-in {
-  animation: fadeIn 0.3s ease-out;
-}
-
-.animate-scroll {
-  animation: scroll 6s linear infinite;
-}
-
-/* Custom utilities */
+/* ------------------------------------------------------ */
+/* 8) EXTRA UTILITIES */
+/* ------------------------------------------------------ */
 .line-clamp-1 {
   overflow: hidden;
   display: -webkit-box;
@@ -95,26 +88,5 @@ h1,h2,h3,h4,h5,h6 {
   -webkit-line-clamp: 2;
 }
 
-.scrollbar-hide {
-  -ms-overflow-style: none;
-  scrollbar-width: none;
-  }
-
-.scrollbar-hide::-webkit-scrollbar {
-  display: none;
-}
-@keyframes scroll {
-  0% { transform: translateX(0); }
-  100% { transform: translateX(-100%); }
-}
-
-.animate-scroll {
-  animation: scroll 8s linear infinite;
-}
-
-@media (max-width: 640px) {
-  .animate-scroll {
-    animation-duration: 5s !important; /* Much faster on mobile */
-  }
-}
-
+.scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
+.scrollbar-hide::-webkit-scrollbar { display: none; }
