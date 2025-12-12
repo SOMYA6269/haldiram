@@ -1,69 +1,92 @@
-import React from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
-import { ArrowLeft, Filter, ChevronDown } from 'lucide-react';
-import ProductCard from '../components/ProductCard';
-import { PRODUCTS } from '../utils/constants';
-import { useCart } from '../context/CartContext';
+// src/pages/Category.jsx
+import React from "react";
+import { useParams, useNavigate } from "react-router-dom";
+import { Filter, ChevronDown } from "lucide-react";
+import ProductCard from "../components/ProductCard";
+import { PRODUCTS, CATEGORY_BANNERS } from "../utils/constants";
+import { useCart } from "../context/CartContext";
 
 const Category = () => {
   const { categoryId } = useParams();
   const navigate = useNavigate();
   const { addToCart } = useCart();
 
-  const filteredProducts = PRODUCTS.filter(
-    p => p.category === categoryId || !categoryId || categoryId === 'All Categories'
+  // FIX: match category names case-insensitively
+  const filtered = PRODUCTS.filter(
+    (p) => p.category.toLowerCase() === categoryId.toLowerCase()
   );
 
-  const displayProducts = filteredProducts.length > 0 ? filteredProducts : PRODUCTS;
-  const displayTitle = categoryId || "All Products";
+  const displayProducts = filtered.length ? filtered : PRODUCTS;
 
-  const handleProductClick = (product) => {
-    navigate(`/product/${product.id}`);
-  };
+  const title = categoryId || "All Products";
+  const banner = CATEGORY_BANNERS[categoryId];
 
   return (
-    <div className="bg-[#f9f9f9] min-h-screen pb-12">
-      
-      {/* HEADER + BREADCRUMB */}
-      <div className="bg-white shadow-sm mb-8">
-        <div className="max-w-[1400px] mx-auto px-4 py-8">
-          <div className="flex items-center text-xs text-gray-500 mb-4 font-medium uppercase tracking-wide">
-            <span className="cursor-pointer hover:text-red-600" onClick={() => navigate('/')}>Home</span>
-            <span className="mx-2 text-gray-300">/</span>
-            <span className="text-gray-800 font-bold">{displayTitle}</span>
+    <div className="pb-24 bg-[#fafafa] min-h-screen w-full overflow-x-hidden">
+
+      {/* CATEGORY BANNER */}
+      {banner && (
+        <div className="w-full">
+          <div className="w-full h-[180px] sm:h-[260px] md:h-[320px] lg:h-[380px] overflow-hidden">
+            <img
+              src={banner}
+              alt={categoryId}
+              className="w-full h-full object-cover"
+            />
           </div>
 
-          <div className="flex flex-col md:flex-row md:items-center justify-between">
-            <h1 className="text-3xl md:text-4xl font-serif font-bold text-gray-900 mb-4 md:mb-0">
-              {displayTitle}
-            </h1>
-
-            <div className="flex space-x-3">
-              <button className="flex items-center px-4 py-2 border border-gray-300 rounded-sm text-xs font-bold uppercase">
-                <Filter className="w-3 h-3 mr-2" /> Filter
-              </button>
-              <button className="flex items-center px-4 py-2 border border-gray-300 rounded-sm text-xs font-bold uppercase">
-                Sort <ChevronDown className="w-3 h-3 ml-2" />
-              </button>
-            </div>
+          <div className="w-full bg-[#d6af72] text-center py-5 shadow-inner">
+            <h2 className="text-white text-xl sm:text-3xl font-serif font-bold uppercase tracking-wide">
+              {categoryId}
+            </h2>
+            <p className="text-white text-xs sm:text-sm mt-1">
+              Explore the finest selection curated just for you.
+            </p>
           </div>
+        </div>
+      )}
+
+      {/* BREADCRUMB */}
+      <div className="max-w-6xl mx-auto px-4 py-3 text-xs text-gray-600 flex gap-1">
+        <span className="cursor-pointer hover:text-red-600" onClick={() => navigate("/")}>
+          Home
+        </span>
+        <span>/</span>
+        <span className="font-bold text-gray-800">{title}</span>
+      </div>
+
+      {/* Title + Filter Row */}
+      <div className="max-w-6xl mx-auto px-4 flex flex-col sm:flex-row sm:items-center justify-between mb-4">
+        <h1 className="text-xl sm:text-3xl font-serif font-bold text-gray-800">
+          {title}
+        </h1>
+
+        <div className="flex gap-3 mt-3 sm:mt-0">
+          <button className="flex items-center px-4 py-2 border border-gray-300 rounded text-xs font-semibold uppercase bg-white hover:bg-gray-50">
+            <Filter className="w-4 h-4 mr-2" /> Filter
+          </button>
+
+          <button className="flex items-center px-4 py-2 border border-gray-300 rounded text-xs font-semibold uppercase bg-white hover:bg-gray-50">
+            Sort <ChevronDown className="w-4 h-4 ml-2" />
+          </button>
         </div>
       </div>
 
-      {/* PRODUCT GRID FIXED */}
-      <div className="w-full max-w-[1400px] mx-auto px-2">
-        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
-          {displayProducts.map(product => (
+      {/* PRODUCT GRID */}
+      <div className="max-w-6xl mx-auto px-3 sm:px-4 w-full">
+        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3 sm:gap-5">
+
+          {displayProducts.map((product) => (
             <ProductCard
               key={product.id}
               product={product}
-              onProductClick={handleProductClick}
-              onAddToCart={addToCart}
+              onProductClick={(p) => navigate(`/product/${p.id}`)}
+              onAddToCart={(p) => addToCart(p)}   // FIXED
             />
           ))}
+
         </div>
       </div>
-
     </div>
   );
 };
