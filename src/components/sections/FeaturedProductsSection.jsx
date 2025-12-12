@@ -1,64 +1,80 @@
-import React, { useRef } from 'react';
-import { ChevronLeft, ChevronRight } from 'lucide-react';
-import { useNavigate } from 'react-router-dom';
-import ProductCard from '../ProductCard';
-import { PRODUCTS, BRAND_CREAM } from '../../utils/constants';
-import { useCart } from '../../context/CartContext';
+import React from "react";
+import { useNavigate } from "react-router-dom";
+import { PRODUCTS } from "../../utils/constants";
+import HaldiramFrame from "../HaldiramFrame";
+import { useCart } from "../../context/CartContext";
+import { Plus } from "lucide-react";
 
 const FeaturedProductsSection = () => {
   const navigate = useNavigate();
   const { addToCart } = useCart();
-  const scrollRef = useRef(null);
-
-  const scroll = (direction) => {
-    if (scrollRef.current) {
-      const { current } = scrollRef;
-      const scrollAmount = direction === 'left' ? -300 : 300;
-      current.scrollBy({ left: scrollAmount, behavior: 'smooth' });
-    }
-  };
-
-  const handleProductClick = (product) => {
-    navigate(`/product/${product.id}`);
-  };
 
   return (
-    <section className={`${BRAND_CREAM} py-20 border-t-2 border-b-2 border-orange-200`}>
-      <div className="container mx-auto px-4">
-        <div className="flex justify-between items-end mb-12 px-2">
-          <div>
-            <h2 className="text-4xl md:text-5xl font-bold text-gray-800 mb-3 font-serif">India's Favourites</h2>
-            <p className="text-gray-600 text-lg italic">Serving India its favorites in every way possible.</p>
-          </div>
-          <div className="flex space-x-3">
-            <button onClick={() => scroll('left')} className="p-3 rounded-full bg-white border-2 border-gray-200 hover:border-red-500 hover:text-red-500 text-gray-500 shadow-lg transition-all hover:shadow-xl">
-              <ChevronLeft className="w-6 h-6" />
-            </button>
-            <button onClick={() => scroll('right')} className="p-3 rounded-full bg-white border-2 border-gray-200 hover:border-red-500 hover:text-red-500 text-gray-500 shadow-lg transition-all hover:shadow-xl">
-              <ChevronRight className="w-6 h-6" />
-            </button>
-          </div>
+    <section className="py-20" style={{ backgroundColor: "#FAF3E6" }}>
+      <div className="max-w-7xl mx-auto px-4">
+
+        {/* TITLE SECTION */}
+        <div className="mb-14">
+          <h2 className="text-4xl md:text-5xl font-serif font-bold text-gray-900">
+            India’s Favourites
+          </h2>
+          <p className="text-gray-700 text-base md:text-lg mt-2">
+            Serving India It's Favourites In Every Way Possible.
+          </p>
         </div>
 
-        <div
-          ref={scrollRef}
-          className="flex space-x-3 md:space-x-6 overflow-x-auto pb-6 md:pb-8 px-2 scrollbar-hide snap-x"
-          style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
-        >
+        {/* PRODUCT GRID – EXACT HALDIRAM LOOK */}
+        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-6 sm:gap-8">
+
           {PRODUCTS.slice(0, 8).map((product) => (
-            <div key={product.id} className="snap-center min-w-[220px] sm:min-w-[240px] md:min-w-[260px] lg:min-w-[280px] flex-shrink-0">
-              <ProductCard product={product} onProductClick={handleProductClick} onAddToCart={addToCart} />
+            <div key={product.id} className="w-full">
+
+              <HaldiramFrame className="bg-white">
+                <div
+                  className="cursor-pointer px-5 pt-8 pb-6 flex flex-col h-full"
+                  onClick={() => navigate(`/product/${product.id}`)}
+                >
+
+                  {/* IMAGE */}
+                  <div className="flex items-center justify-center h-44 mb-5">
+                    <img
+                      src={product.image}
+                      alt={product.name}
+                      className="max-h-36 object-contain"
+                    />
+                  </div>
+
+                  {/* PRODUCT NAME */}
+                  <h3 className="text-[15px] md:text-base text-gray-900 font-semibold mb-4 line-clamp-2 leading-snug">
+                    {product.name}
+                  </h3>
+
+                  {/* PRICE + ADD BUTTON */}
+                  <div className="flex items-center justify-between mt-auto">
+                    <div>
+                      <p className="text-lg font-bold text-gray-900">
+                        ₹{product.price}.00
+                      </p>
+                      <p className="text-xs text-gray-500 -mt-1">Inc. GST</p>
+                    </div>
+
+                    <button
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        addToCart(product);
+                      }}
+                      className="w-10 h-10 flex items-center justify-center 
+                                 border border-gray-400 rounded-md
+                                 hover:border-red-600 hover:text-red-600 transition-all"
+                    >
+                      <Plus className="w-5 h-5" />
+                    </button>
+                  </div>
+                </div>
+              </HaldiramFrame>
             </div>
           ))}
-        </div>
 
-        <div className="text-center mt-8">
-          <button
-            className="border-2 border-gray-800 text-gray-800 px-12 py-4 rounded-full font-bold hover:bg-gray-800 hover:text-white transition-all uppercase text-sm tracking-widest shadow-lg hover:shadow-xl transform hover:-translate-y-1"
-            onClick={() => navigate('/category/Mithai')}
-          >
-            View All Products
-          </button>
         </div>
       </div>
     </section>
