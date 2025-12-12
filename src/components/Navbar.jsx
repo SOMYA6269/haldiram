@@ -1,170 +1,240 @@
 // src/components/Navbar.jsx
 import React, { useState, useRef, useEffect } from "react";
-import { Search, ShoppingBag, User, Menu, Heart, X, ChevronDown } from "lucide-react";
-import { NAV_LINKS, CATEGORY_SUBMENU, BRAND_RED } from "../utils/constants";
+import {
+  Search,
+  ShoppingBag,
+  Menu,
+  Heart,
+  ChevronDown,
+} from "lucide-react";
+
+import { NAV_LINKS, CATEGORY_SUBMENU } from "../utils/constants";
 import { useCart } from "../context/CartContext";
 
 const Navbar = ({ setMobileMenuOpen, cartCount, onOpenCart, onNavigate }) => {
-  const { wishlistCount, showLoginModal, setShowLoginModal, isLoggedIn, login } = useCart();
+  const { wishlistCount } = useCart();
 
   const [searchQuery, setSearchQuery] = useState("");
   const [activeDropdown, setActiveDropdown] = useState(null);
   const dropdownRef = useRef(null);
-  const [mobileNumber, setMobileNumber] = useState("");
-  const [otp, setOtp] = useState("");
-  const [showOtpInput, setShowOtpInput] = useState(false);
 
   useEffect(() => {
     const close = (e) => {
-      if (dropdownRef.current && !dropdownRef.current.contains(e.target)) setActiveDropdown(null);
+      if (dropdownRef.current && !dropdownRef.current.contains(e.target)) {
+        setActiveDropdown(null);
+      }
     };
     document.addEventListener("mousedown", close);
     return () => document.removeEventListener("mousedown", close);
   }, []);
 
   const handleSearch = (e) => {
-    e?.preventDefault();
-    if (searchQuery.trim()) {
-      onNavigate(`/search?q=${encodeURIComponent(searchQuery)}`);
-      setSearchQuery("");
-    }
-  };
-
-  const openLogin = () => setShowLoginModal(true);
-
-  const handleSendOtp = () => {
-    if (mobileNumber.length === 10) setShowOtpInput(true);
-  };
-  const handleVerifyOtp = () => {
-    if (otp === "1234") {
-      login({ mobile: mobileNumber });
-      setMobileNumber(""); setOtp(""); setShowOtpInput(false);
-      setShowLoginModal(false);
-    } else {
-      alert("Invalid OTP (use 1234)");
-    }
+    e.preventDefault();
+    if (!searchQuery.trim()) return;
+    onNavigate(`/search?q=${encodeURIComponent(searchQuery)}`);
+    setSearchQuery("");
   };
 
   return (
-    <>
-      <header className="sticky top-0 z-50 bg-white shadow-sm">
-        <div className="border-b border-gray-200">
-          <div className="max-w-7xl mx-auto px-4 py-3 flex items-center justify-between">
-            {/* left - mobile menu */}
-            <div className="flex items-center gap-3">
-              <button className="lg:hidden p-2 rounded-md border" onClick={() => setMobileMenuOpen(s => !s)}>
-                <Menu className="w-5 h-5" />
-              </button>
+    <div className="sticky top-0 z-50 bg-white shadow-md font-sans">
 
-              {/* logo */}
-              <button onClick={() => onNavigate("/")} className="flex-shrink-0">
-                <img src="/images/products/lgo.png" alt="Haldiram" className="h-12 object-contain" />
-              </button>
-            </div>
+      {/* ================= MOBILE HEADER ================= */}
+      <header className="lg:hidden h-[74px] px-4 flex items-center justify-between border-b border-gray-200 relative">
 
-            {/* search center */}
-            <form onSubmit={handleSearch} className="hidden md:flex flex-1 justify-center px-6">
-              <div className="flex w-full max-w-[520px] border rounded-full overflow-hidden">
-                <div className="px-3 flex items-center bg-gray-50"><Search className="w-5 h-5 text-gray-400" /></div>
-                <input
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  placeholder="Search 200+ products"
-                  className="flex-1 px-3 py-2 text-sm focus:outline-none"
-                />
-                <button className={`${BRAND_RED} px-5 text-white`}>Search</button>
-              </div>
-            </form>
+        {/* Left gap */}
+        <div className="w-20"></div>
 
-            {/* icons */}
-            <div className="flex items-center gap-3">
-              <button onClick={() => setShowLoginModal(true)} className="hidden md:flex items-center text-gray-700 hover:text-red-600">
-                <User className="w-5 h-5" />
-              </button>
+        {/* Logo */}
+        <button
+          onClick={() => onNavigate("/")}
+          className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2"
+        >
+          <img
+            src="/images/products/lgo.png"
+            alt="Haldiram"
+            className="h-14 object-contain"
+          />
+        </button>
 
-              <button onClick={() => onNavigate("/wishlist")} className="hidden md:flex relative text-gray-700 hover:text-red-600">
-                <Heart className="w-5 h-5" />
-                {wishlistCount > 0 && <span className="absolute -top-1 -right-2 bg-red-600 text-white text-[10px] px-1 rounded-full">{wishlistCount}</span>}
-              </button>
+        {/* Wishlist | Cart | Menu */}
+        <div className="w-20 flex items-center justify-end gap-5">
 
-              <button onClick={onOpenCart} className="relative text-gray-700 hover:text-red-600">
-                <ShoppingBag className="w-6 h-6" />
-                {cartCount > 0 && <span className="absolute -top-1 -right-2 bg-red-600 text-white text-[10px] px-1 rounded-full">{cartCount}</span>}
-              </button>
-            </div>
-          </div>
-        </div>
+          {/* Wishlist */}
+          <button onClick={() => onNavigate("/wishlist")} className="relative">
+            <Heart className="w-6 h-6 text-gray-700" />
+            {wishlistCount > 0 && (
+              <span className="absolute -top-1 -right-2 bg-red-600 text-white h-4 w-4 rounded-full text-[10px] font-bold flex items-center justify-center">
+                {wishlistCount}
+              </span>
+            )}
+          </button>
 
-        {/* nav row */}
-        <div className="bg-white">
-          <div ref={dropdownRef} className="max-w-7xl mx-auto px-4 py-2 hidden lg:flex items-center justify-center gap-10">
-            {NAV_LINKS.map(cat => (
-              <div key={cat} className="relative">
-                <button
-                  onClick={() => onNavigate(`/category/${cat}`)}
-                  onMouseEnter={() => CATEGORY_SUBMENU[cat] && setActiveDropdown(cat)}
-                  className="uppercase text-sm tracking-wide text-gray-700 hover:text-red-600 flex items-center gap-2"
-                >
-                  {cat}
-                  {CATEGORY_SUBMENU[cat] && <ChevronDown className="w-4 h-4" />}
-                </button>
+          {/* CART */}
+          <button onClick={onOpenCart} className="relative">
+            <ShoppingBag className="w-6 h-6 text-gray-700" />
+            {cartCount > 0 && (
+              <span className="absolute -top-1 -right-2 bg-red-600 text-white h-4 w-4 rounded-full text-[10px] font-bold flex items-center justify-center">
+                {cartCount}
+              </span>
+            )}
+          </button>
 
-                {activeDropdown === cat && CATEGORY_SUBMENU[cat] && (
-                  <div className="absolute top-full left-1/2 -translate-x-1/2 mt-3 w-56 bg-white border shadow-xl rounded-md z-50">
-                    {CATEGORY_SUBMENU[cat].map(si => (
-                      <button key={si.name} onClick={() => onNavigate(si.href)} className="w-full text-left px-4 py-2 text-gray-700 hover:bg-red-50">{si.name}</button>
-                    ))}
-                  </div>
-                )}
-              </div>
-            ))}
-          </div>
+          {/* Menu */}
+          <button onClick={() => setMobileMenuOpen(true)}>
+            <Menu className="w-7 h-7 text-gray-700" />
+          </button>
         </div>
       </header>
 
-      {/* announcement bar */}
-      <div className="bg-red-600 text-white py-2 overflow-hidden">
-        <div className="container mx-auto px-4">
-          <div className="flex animate-scroll whitespace-nowrap gap-12 text-sm">
-            <span>Great Taste since 1937</span>
-            <span>Evolving with India's tastes to deliver the finest Flavours</span>
-            <span>Great News! From 22nd Sept 2025, many of your Haldiram’s favourites just got more pocket-friendly with revised GST rate. We are passing the savings straight to you.</span>
-          </div>
+      {/* ================= DESKTOP HEADER ================= */}
+      <header className="hidden lg:flex items-center justify-between h-[108px] border-b border-gray-200 px-10 max-w-[1700px] mx-auto bg-white">
+
+        {/* Logo */}
+        <button onClick={() => onNavigate("/")}>
+          <img
+            src="/images/products/lgo.png"
+            className="h-[82px] object-contain"
+            alt="Logo"
+          />
+        </button>
+
+        {/* NAVIGATION */}
+        <nav ref={dropdownRef} className="flex items-center gap-10">
+          {NAV_LINKS.map((cat) => (
+            <div key={cat} className="relative group">
+
+              <button
+                onClick={() => onNavigate(`/category/${cat}`)}
+                onMouseEnter={() => CATEGORY_SUBMENU[cat] && setActiveDropdown(cat)}
+                className="uppercase tracking-wide text-[17px] font-semibold text-gray-700 hover:text-red-600 pb-2 border-b-2 border-transparent hover:border-red-600 transition-all flex items-center gap-1"
+              >
+                {cat}
+                {CATEGORY_SUBMENU[cat] && (
+                  <ChevronDown className="w-4.5 h-4.5 text-gray-500" />
+                )}
+              </button>
+
+              {/* Dropdown */}
+              {activeDropdown === cat && CATEGORY_SUBMENU[cat] && (
+                <div
+                  className="absolute top-full left-0 w-64 bg-white border shadow-lg rounded-b-md z-50"
+                  onMouseLeave={() => setActiveDropdown(null)}
+                >
+                  {CATEGORY_SUBMENU[cat].map((item) => (
+                    <button
+                      key={item.name}
+                      onClick={() => onNavigate(item.href)}
+                      className="w-full text-left px-6 py-3 text-sm hover:bg-red-50 hover:text-red-600"
+                    >
+                      {item.name}
+                    </button>
+                  ))}
+                </div>
+              )}
+            </div>
+          ))}
+        </nav>
+
+        {/* RIGHT AREA */}
+        <div className="flex items-center gap-8">
+
+          {/* Corporate Button */}
+          <button className="bg-[#6E4FA0] text-white px-5 py-2.5 rounded text-sm font-bold tracking-wide hover:bg-[#5b4187] transition">
+            CORPORATE
+          </button>
+
+          {/* Search */}
+          <form onSubmit={handleSearch} className="relative">
+            <input
+              type="text"
+              placeholder="Search 200+ products"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className="w-[300px] bg-gray-100 rounded-full pl-5 pr-12 py-3 text-[15px] focus:outline-none"
+            />
+            <button className="absolute right-4 top-1/2 -translate-y-1/2">
+              <Search className="w-5 h-5 text-gray-500" />
+            </button>
+          </form>
+
+          {/* Wishlist */}
+          <button onClick={() => onNavigate("/wishlist")} className="relative">
+            <Heart className="w-[30px] h-[30px] text-gray-700 hover:text-red-600" />
+            {wishlistCount > 0 && (
+              <span className="absolute -top-1 -right-2 bg-red-600 text-white h-4 w-4 rounded-full text-[10px] flex items-center justify-center">
+                {wishlistCount}
+              </span>
+            )}
+          </button>
+
+          {/* Cart */}
+          <button onClick={onOpenCart} className="relative">
+            <ShoppingBag className="w-[30px] h-[30px] text-gray-700 hover:text-red-600" />
+            {cartCount > 0 && (
+              <span className="absolute -top-1 -right-2 bg-red-600 text-white h-4 w-4 rounded-full text-[10px] flex items-center justify-center">
+                {cartCount}
+              </span>
+            )}
+          </button>
+        </div>
+      </header>
+
+      {/* ================= ANNOUNCEMENT BAR ================= */}
+      <div className="bg-[#970505] text-white h-14 flex items-center overflow-hidden border-t shadow-inner">
+        <div className="flex animate-marquee whitespace-nowrap text-[15px] font-semibold">
+          <span className="mx-10">☁ Great Taste since 1937</span>
+          <span className="mx-10">★ Evolving with India's tastes</span>
+          <span className="mx-10 text-yellow-200 font-bold">
+            📢 GST Rate Cut: Prices Slashed from 22nd Sept!
+          </span>
+
+          {/* Duplicate for looping scroll */}
+          <span className="mx-10">☁ Great Taste since 1937</span>
+          <span className="mx-10">★ Evolving with India's tastes</span>
+          <span className="mx-10 text-yellow-200 font-bold">
+            📢 GST Rate Cut: Prices Slashed from 22nd Sept!
+          </span>
         </div>
       </div>
 
-      {/* LOGIN MODAL */}
-      {showLoginModal && (
-        <div className="fixed inset-0 z-[60] bg-black bg-opacity-50 flex items-center justify-center p-4">
-          <div className="bg-white rounded-xl shadow-xl w-full max-w-md">
-            <div className="p-5 border-b flex justify-between items-center">
-              <img src="/images/products/Haldiram's_Logo_SVG.svg.png" alt="logo" className="h-10" />
-              <button onClick={() => setShowLoginModal(false)}><X className="w-5 h-5" /></button>
-            </div>
+      {/* ================= MOBILE BOTTOM BAR ================= */}
+      <div className="lg:hidden fixed bottom-0 left-0 right-0 bg-white border-t flex justify-around py-2.5 z-50 shadow-[0_-4px_12px_rgba(0,0,0,0.1)]">
 
-            <div className="p-6">
-              {!showOtpInput ? (
-                <>
-                  <input
-                    type="tel"
-                    value={mobileNumber}
-                    onChange={e => setMobileNumber(e.target.value.replace(/\D/g,'').slice(0,10))}
-                    placeholder="+91 Enter your mobile number"
-                    className="w-full border px-4 py-3 rounded-lg mb-3"
-                  />
-                  <button onClick={handleSendOtp} disabled={mobileNumber.length !== 10} className={`${BRAND_RED} w-full text-white py-3 rounded-lg`}>Request OTP</button>
-                </>
-              ) : (
-                <>
-                  <input type="tel" value={otp} onChange={e => setOtp(e.target.value.replace(/\D/g,'').slice(0,4))} placeholder="Enter OTP (1234)" className="w-full border px-4 py-3 rounded-lg mb-3 text-center" />
-                  <button onClick={handleVerifyOtp} disabled={otp.length !== 4} className={`${BRAND_RED} w-full text-white py-3 rounded-lg`}>Verify</button>
-                </>
-              )}
-            </div>
+        {/* Search */}
+        <button onClick={() => onNavigate("/search")} className="flex flex-col items-center text-gray-600">
+          <Search className="w-5 h-5" />
+          <span className="text-[10px]">Search</span>
+        </button>
+
+        {/* Categories */}
+        <button onClick={() => setMobileMenuOpen(true)} className="flex flex-col items-center text-gray-600">
+          <Menu className="w-5 h-5" />
+          <span className="text-[10px]">Categories</span>
+        </button>
+
+        {/* Cart */}
+        <button onClick={onOpenCart} className="flex flex-col items-center text-gray-600">
+          <div className="relative">
+            <ShoppingBag className="w-5 h-5" />
+            {cartCount > 0 && (
+              <span className="absolute -top-1 -right-1 h-3 w-3 bg-red-600 rounded-full border-2 border-white"></span>
+            )}
           </div>
-        </div>
-      )}
-    </>
+          <span className="text-[10px]">Cart</span>
+        </button>
+      </div>
+
+      {/* Marquee Animation */}
+      <style>{`
+        @keyframes marquee {
+          0% { transform: translateX(0); }
+          100% { transform: translateX(-50%); }
+        }
+        .animate-marquee {
+          animation: marquee 12s linear infinite;
+        }
+      `}</style>
+    </div>
   );
 };
 
