@@ -1,48 +1,21 @@
-// src/components/HaldiramFrame.jsx
-import React from "react";
-
-/**
- * HaldiramFrame
- * Wrap content with ornamental corners + golden border.
- * Usage:
- *  <HaldiramFrame>
- *    <div>...card content...</div>
- *  </HaldiramFrame>
- */
-const HaldiramFrame = ({ children, className = "" }) => {
-  // data-URI small SVG corner (golden stroke)
-  const cornerSvg = encodeURIComponent(
-    `<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 48 48'><path d='M6 42 Q6 6 42 6' stroke='%23C8A46A' stroke-width='3' fill='none' stroke-linecap='round' stroke-linejoin='round'/></svg>`
-  );
-
+const HaldiramFrame = ({ children }) => {
   return (
-    <div className={`relative ${className}`}>
-      {/* Corners */}
-      <span
-        aria-hidden
-        className="absolute -top-3 -left-3 w-12 h-12 bg-no-repeat bg-contain pointer-events-none"
-        style={{ backgroundImage: `url("data:image/svg+xml;utf8,${cornerSvg}")` }}
-      />
-      <span
-        aria-hidden
-        className="absolute -top-3 -right-3 w-12 h-12 rotate-90 bg-no-repeat bg-contain pointer-events-none"
-        style={{ backgroundImage: `url("data:image/svg+xml;utf8,${cornerSvg}")` }}
-      />
-      <span
-        aria-hidden
-        className="absolute -bottom-3 -left-3 w-12 h-12 -rotate-90 bg-no-repeat bg-contain pointer-events-none"
-        style={{ backgroundImage: `url("data:image/svg+xml;utf8,${cornerSvg}")` }}
-      />
-      <span
-        aria-hidden
-        className="absolute -bottom-3 -right-3 w-12 h-12 rotate-180 bg-no-repeat bg-contain pointer-events-none"
-        style={{ backgroundImage: `url("data:image/svg+xml;utf8,${cornerSvg}")` }}
-      />
+    <div className="relative border border-[#d7b98a] rounded-xl p-1"
+         style={{ borderWidth: "2px" }}>
+      
+      {/* Top-left swirl */}
+      <span className="absolute -top-2 left-4 w-5 h-5 border-t-2 border-l-2 border-[#d7b98a] rounded-tl-xl"></span>
 
-      {/* Inner border and padding */}
-      <div className="border-2 border-[#E7CFA8] rounded-lg p-4 bg-white">
-        {children}
-      </div>
+      {/* Top-right swirl */}
+      <span className="absolute -top-2 right-4 w-5 h-5 border-t-2 border-r-2 border-[#d7b98a] rounded-tr-xl"></span>
+
+      {/* Bottom-left swirl */}
+      <span className="absolute -bottom-2 left-4 w-5 h-5 border-b-2 border-l-2 border-[#d7b98a] rounded-bl-xl"></span>
+
+      {/* Bottom-right swirl */}
+      <span className="absolute -bottom-2 right-4 w-5 h-5 border-b-2 border-r-2 border-[#d7b98a] rounded-br-xl"></span>
+
+      <div className="bg-white rounded-lg">{children}</div>
     </div>
   );
 };
