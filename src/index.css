@@ -1,31 +1,19 @@
 /* ------------------------------------------------------ */
 /* 1) GOOGLE FONTS (must be FIRST!) */
 /* ------------------------------------------------------ */
-@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700;800&family=Inter:wght@300;400;600;700&display=swap');
+/* Import closest matches to haldiram.com typography */
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700;900&family=Montserrat:wght@300;400;500;600;700&display=swap');
 
-/* ------------------------------------------------------ */
-/* 2) TAILWIND DIRECTIVES */
-/* ------------------------------------------------------ */
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-/* ------------------------------------------------------ */
-/* 3) GLOBAL VARIABLES */
-/* ------------------------------------------------------ */
-:root {
-  --brand-red: #E31E24;
-  --frame-gold: #E7CFA8;
-}
-
-/* ------------------------------------------------------ */
-/* 4) BASE FONTS */
-/* ------------------------------------------------------ */
+/* Apply base font */
 html, body, #root {
-  font-family: 'Inter', system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
-  background-color: #ffffff;
+  font-family: 'Montserrat', sans-serif;
 }
 
+/* Headings use serif for premium feel */
 h1, h2, h3, h4, h5, h6 {
   font-family: 'Playfair Display', serif;
 }
